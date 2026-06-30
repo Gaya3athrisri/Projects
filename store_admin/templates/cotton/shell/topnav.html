@@ -1,0 +1,72 @@
+<!-- ============================================================ -->
+<!-- SHELL: TOP NAVBAR -->
+<!-- Usage: <c-shell.topnav /> -->
+<!-- ============================================================ -->
+<header class="h-16 bg-white border-b border-charcoal-100 flex items-center justify-between px-6 flex-shrink-0 relative z-20">
+  <div>
+    <nav class="flex items-center gap-1.5 text-xs text-charcoal-300 mb-0.5">
+      <span>Threadline</span>
+      <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+      <span class="text-charcoal-500 font-medium" x-text="pageTitle()"></span>
+    </nav>
+    <h1 class="font-display text-xl text-charcoal-700" x-text="pageTitle()"></h1>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <!-- Notification bell -->
+    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+      <button @click="open = !open; if(open) unreadCount = 0" class="relative w-10 h-10 rounded-full hover:bg-charcoal-50 flex items-center justify-center transition">
+        <svg class="w-5 h-5 text-charcoal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute top-1.5 right-1.5 w-4.5 h-4.5 min-w-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-semibold flex items-center justify-center leading-none"></span>
+      </button>
+
+      <!-- Notification panel -->
+      <div x-show="open" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+        class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-panel border border-charcoal-100 overflow-hidden" style="display:none;">
+        <div class="px-4 py-3 border-b border-charcoal-100 flex items-center justify-between">
+          <span class="font-semibold text-sm text-charcoal-700">Notifications</span>
+          <button class="text-xs text-rose-600 hover:text-rose-700 font-medium">Mark all read</button>
+        </div>
+        <div class="max-h-80 overflow-y-auto">
+          <template x-for="n in notifications" :key="n.id">
+            <div class="px-4 py-3 border-b border-charcoal-50 hover:bg-charcoal-50 flex gap-3 cursor-pointer transition">
+              <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" :class="n.type === 'order' ? 'bg-softpink text-rose-500' : n.type === 'stock' ? 'bg-amber-50 text-amber-500' : 'bg-charcoal-50 text-charcoal-400'">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 7l-9 9-5-5" x-show="n.type==='order'"/><circle cx="12" cy="12" r="9" x-show="n.type!=='order'"/></svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm text-charcoal-700 leading-snug" x-text="n.text"></p>
+                <p class="text-xs text-charcoal-300 mt-0.5" x-text="n.time"></p>
+              </div>
+            </div>
+          </template>
+        </div>
+        <button @click="page='notifications'; open=false" class="w-full py-2.5 text-xs font-medium text-rose-600 hover:bg-softpink transition border-t border-charcoal-100">View all notifications</button>
+      </div>
+    </div>
+
+    <!-- Avatar dropdown -->
+    <div class="relative" x-data="{ open: false }" @click.outside="open = false">
+      <button @click="open = !open" class="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-full hover:bg-charcoal-50 transition">
+        <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-semibold text-sm flex-shrink-0">PK</div>
+        <div class="text-left hidden sm:block">
+          <p class="text-[13px] font-semibold text-charcoal-700 leading-none">Priya Kannan</p>
+          <p class="text-xs text-charcoal-300 leading-none mt-0.5">Admin</p>
+        </div>
+        <svg class="w-3.5 h-3.5 text-charcoal-300 hidden sm:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div x-show="open" x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+        class="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-panel border border-charcoal-100 overflow-hidden py-1.5" style="display:none;">
+        <button @click="page='settings'; open=false" class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-charcoal-600 hover:bg-charcoal-50 transition text-left">
+          <svg class="w-4 h-4 text-charcoal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 008.6 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H2a2 2 0 110-4h.09A1.65 1.65 0 003.6 8.6a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H8a1.65 1.65 0 001-1.51V2a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V8a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          Profile settings
+        </button>
+        <div class="h-px bg-charcoal-100 my-1"></div>
+        <button @click="logout()" class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 hover:bg-softpink transition text-left">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+          Log out
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

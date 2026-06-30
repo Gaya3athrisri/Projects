@@ -1,0 +1,85 @@
+<!-- ============================================================ -->
+<!-- AUTH: LOGIN -->
+<!-- Usage: <c-auth.login /> -->
+<!-- ============================================================ -->
+<div x-show="!authed && authView === 'login'" class="min-h-screen flex">
+  <!-- Left: brand panel -->
+  <div class="hidden lg:flex lg:w-1/2 bg-charcoal-700 relative overflow-hidden flex-col justify-between p-12">
+    <div class="absolute inset-0 opacity-[0.07]" style="background-image: repeating-linear-gradient(135deg, #D4537E 0px, #D4537E 1px, transparent 1px, transparent 28px);"></div>
+    <div class="relative z-10">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-lg bg-rose-500 flex items-center justify-center font-display text-warmwhite text-lg">T</div>
+        <span class="font-display text-warmwhite text-xl tracking-tight">Threadline</span>
+      </div>
+    </div>
+    <div class="relative z-10">
+      <p class="font-display text-warmwhite text-4xl leading-tight max-w-md">Every order,<br/>every stitch,<br/><span class="text-rose-300">one ledger.</span></p>
+      <p class="text-charcoal-300 mt-5 max-w-sm text-[15px] leading-relaxed">The back office for your clothing line — inventory, dispatch, and revenue in one calm view.</p>
+    </div>
+    <div class="relative z-10 flex items-center gap-6 text-charcoal-300 text-sm font-mono">
+      <span>04,812 ORDERS SHIPPED</span>
+      <span class="w-1 h-1 rounded-full bg-rose-400"></span>
+      <span>112 SKUS LIVE</span>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div class="flex-1 flex items-center justify-center p-6 sm:p-12 bg-warmwhite">
+    <div class="w-full max-w-sm">
+      <div class="lg:hidden flex items-center gap-2.5 mb-10 justify-center">
+        <div class="w-9 h-9 rounded-lg bg-rose-500 flex items-center justify-center font-display text-warmwhite text-lg">T</div>
+        <span class="font-display text-charcoal-700 text-xl tracking-tight">Threadline</span>
+      </div>
+
+      <h1 class="font-display text-3xl text-charcoal-700">Welcome back</h1>
+      <p class="text-charcoal-400 text-sm mt-2 mb-8">Sign in to manage today's orders.</p>
+
+      <template x-if="loginError">
+        <div class="mb-5 flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          <span>That email and password combination doesn't match our records.</span>
+        </div>
+      </template>
+
+      <form @submit.prevent="submitLogin()" novalidate>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-charcoal-600 mb-1.5">Email</label>
+          <input type="email" x-model="login.email" @blur="validateLogin('email')"
+            :class="login.errors.email ? 'border-rose-500 ring-1 ring-rose-200' : 'border-charcoal-200 focus:border-rose-400'"
+            class="w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-charcoal-700 placeholder-charcoal-300 outline-none transition focus:ring-2 focus:ring-rose-100"
+            placeholder="you@threadline.com" />
+          <p x-show="login.errors.email" x-text="login.errors.email" class="mt-1.5 text-xs text-rose-600"></p>
+        </div>
+
+        <div class="mb-2">
+          <label class="block text-sm font-medium text-charcoal-600 mb-1.5">Password</label>
+          <div class="relative">
+            <input :type="showPw ? 'text' : 'password'" x-model="login.password" @blur="validateLogin('password')"
+              :class="login.errors.password ? 'border-rose-500 ring-1 ring-rose-200' : 'border-charcoal-200 focus:border-rose-400'"
+              class="w-full rounded-xl border bg-white px-3.5 py-2.5 pr-10 text-sm text-charcoal-700 placeholder-charcoal-300 outline-none transition focus:ring-2 focus:ring-rose-100"
+              placeholder="••••••••" />
+            <button type="button" @click="showPw = !showPw" class="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-300 hover:text-charcoal-500">
+              <svg x-show="!showPw" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg x-show="showPw" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 4.24A9.7 9.7 0 0112 4c7 0 11 7 11 7a13.2 13.2 0 01-2.3 3.1M6.1 6.1A13 13 0 001 12s4 7 11 7a9.7 9.7 0 005.1-1.4"/></svg>
+            </button>
+          </div>
+          <p x-show="login.errors.password" x-text="login.errors.password" class="mt-1.5 text-xs text-rose-600"></p>
+        </div>
+
+        <div class="flex items-center justify-between mt-4 mb-6">
+          <label class="flex items-center gap-2 text-sm text-charcoal-500 cursor-pointer select-none">
+            <input type="checkbox" x-model="login.remember" class="rose-check w-4 h-4 rounded border-charcoal-300" />
+            Remember me
+          </label>
+          <button type="button" @click="authView = 'forgot'" class="text-sm text-rose-600 hover:text-rose-700 font-medium">Forgot password?</button>
+        </div>
+
+        <button type="submit" class="w-full rounded-xl bg-rose-500 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-rose-600 active:bg-rose-700 transition">
+          Sign in
+        </button>
+      </form>
+
+      <p class="text-center text-xs text-charcoal-300 mt-8 font-mono">DEMO — use any email + password 6 characters or more</p>
+    </div>
+  </div>
+</div>

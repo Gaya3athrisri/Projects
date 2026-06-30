@@ -1,0 +1,79 @@
+<!-- ============================================================ -->
+<!-- PAGE: PRODUCT LIST -->
+<!-- Usage: <c-pages.products-list /> -->
+<!-- ============================================================ -->
+<div x-show="page === 'products-list'" class="p-6">
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4 border-b border-charcoal-100">
+      <div class="relative w-full sm:w-72">
+        <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" x-model="productSearch" placeholder="Search products or SKU..."
+          class="w-full rounded-xl border border-charcoal-200 bg-warmwhite pl-9 pr-3 py-2 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition" />
+      </div>
+      <button @click="navigate('products-add')" class="flex items-center justify-center gap-1.5 rounded-xl bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-600 transition flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add product
+      </button>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-charcoal-400 uppercase tracking-wide border-b border-charcoal-100">
+            <th class="px-5 py-3 font-medium">Product</th>
+            <th class="px-5 py-3 font-medium">SKU</th>
+            <th class="px-5 py-3 font-medium">Category</th>
+            <th class="px-5 py-3 font-medium">Price</th>
+            <th class="px-5 py-3 font-medium">Stock</th>
+            <th class="px-5 py-3 font-medium">Status</th>
+            <th class="px-5 py-3 font-medium text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="p in filteredProducts" :key="p.id">
+            <tr class="border-b border-charcoal-50 hover:bg-warmwhite/60 transition">
+              <td class="px-5 py-3.5">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-softpink flex items-center justify-center text-base flex-shrink-0" x-text="p.emoji"></div>
+                  <span class="font-medium text-charcoal-700" x-text="p.name"></span>
+                </div>
+              </td>
+              <td class="px-5 py-3.5 font-mono text-charcoal-400 text-xs" x-text="p.sku"></td>
+              <td class="px-5 py-3.5 text-charcoal-500" x-text="p.category"></td>
+              <td class="px-5 py-3.5 font-mono text-charcoal-700" x-text="'₹' + p.price.toLocaleString('en-IN')"></td>
+              <td class="px-5 py-3.5 text-charcoal-500" x-text="p.stock"></td>
+              <td class="px-5 py-3.5"><span class="badge" :class="statusBadgeClass(p.status)" x-text="p.status"></span></td>
+              <td class="px-5 py-3.5 text-right">
+                <div class="flex items-center justify-end gap-1">
+                  <button @click="editProduct(p)" class="p-1.5 rounded-lg text-charcoal-400 hover:bg-charcoal-50 hover:text-charcoal-600 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button @click="confirmDelete(p)" class="p-1.5 rounded-lg text-charcoal-400 hover:bg-rose-50 hover:text-rose-600 transition">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </template>
+          <tr x-show="filteredProducts.length === 0">
+            <td colspan="7" class="px-5 py-12 text-center">
+              <p class="text-charcoal-400 text-sm">No products match "<span x-text="productSearch"></span>". Try a different search.</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between px-5 py-3.5 border-t border-charcoal-100">
+      <span class="text-xs text-charcoal-400">Showing <span class="font-medium text-charcoal-600" x-text="filteredProducts.length"></span> of <span class="font-medium text-charcoal-600" x-text="products.length"></span> products</span>
+      <div class="flex items-center gap-1">
+        <button class="w-8 h-8 rounded-lg border border-charcoal-200 flex items-center justify-center text-charcoal-400 hover:bg-charcoal-50 transition"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button class="w-8 h-8 rounded-lg bg-rose-500 text-white text-xs font-medium flex items-center justify-center">1</button>
+        <button class="w-8 h-8 rounded-lg border border-charcoal-200 text-xs text-charcoal-500 hover:bg-charcoal-50 transition flex items-center justify-center">2</button>
+        <button class="w-8 h-8 rounded-lg border border-charcoal-200 text-xs text-charcoal-500 hover:bg-charcoal-50 transition flex items-center justify-center">3</button>
+        <button class="w-8 h-8 rounded-lg border border-charcoal-200 flex items-center justify-center text-charcoal-400 hover:bg-charcoal-50 transition"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>

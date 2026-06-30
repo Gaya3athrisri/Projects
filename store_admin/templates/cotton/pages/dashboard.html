@@ -1,0 +1,117 @@
+<!-- ============================================================ -->
+<!-- PAGE: DASHBOARD -->
+<!-- Usage: <c-pages.dashboard /> -->
+<!-- ============================================================ -->
+<div x-show="page === 'dashboard'" class="p-6 space-y-6">
+
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-medium text-charcoal-400 uppercase tracking-wide">Total income</span>
+        <div class="w-8 h-8 rounded-lg bg-softpink flex items-center justify-center text-rose-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+      </div>
+      <p class="font-display text-2xl text-charcoal-700">₹8,42,650</p>
+      <p class="text-xs text-charcoal-400 mt-1.5">from <span class="font-medium text-charcoal-600">1,284 orders</span> · <span class="text-emerald-600 font-medium">+12.4%</span></p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-medium text-charcoal-400 uppercase tracking-wide">Dispatched</span>
+        <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="1.5"/><circle cx="18.5" cy="18.5" r="1.5"/></svg>
+        </div>
+      </div>
+      <p class="font-display text-2xl text-charcoal-700">1,096</p>
+      <p class="text-xs text-charcoal-400 mt-1.5">orders shipped this month</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-medium text-charcoal-400 uppercase tracking-wide">Undispatched</span>
+        <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        </div>
+      </div>
+      <p class="font-display text-2xl text-charcoal-700">188</p>
+      <p class="text-xs text-charcoal-400 mt-1.5">awaiting dispatch · <span class="text-rose-600 font-medium">23 overdue</span></p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-medium text-charcoal-400 uppercase tracking-wide">Active users</span>
+        <div class="w-8 h-8 rounded-lg bg-charcoal-50 flex items-center justify-center text-charcoal-500">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+      </div>
+      <p class="font-display text-2xl text-charcoal-700">14</p>
+      <p class="text-xs text-charcoal-400 mt-1.5">logged in right now</p>
+    </div>
+  </div>
+
+  <!-- Chart + recent orders -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h3 class="font-display text-lg text-charcoal-700">Weekly orders</h3>
+          <p class="text-xs text-charcoal-400 mt-0.5">Last 7 days</p>
+        </div>
+        <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-softpink text-rose-600">+8.2% vs last week</span>
+      </div>
+      <div class="h-64">
+        <canvas id="weeklyOrdersChart"></canvas>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+      <h3 class="font-display text-lg text-charcoal-700 mb-4">Stock alerts</h3>
+      <div class="space-y-3">
+        <template x-for="(s, i) in stockAlerts" :key="i">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-softpink flex-shrink-0 flex items-center justify-center text-base" x-text="s.emoji"></div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-charcoal-700 truncate" x-text="s.name"></p>
+              <p class="text-xs text-charcoal-400" x-text="s.left + ' left in stock'"></p>
+            </div>
+            <span class="text-xs font-mono px-2 py-0.5 rounded-full flex-shrink-0" :class="s.left < 5 ? 'bg-rose-50 text-rose-600' : 'bg-amber-50 text-amber-600'" x-text="s.left < 5 ? 'Critical' : 'Low'"></span>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent orders table preview -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 overflow-hidden">
+    <div class="flex items-center justify-between px-5 py-4 border-b border-charcoal-100">
+      <h3 class="font-display text-lg text-charcoal-700">Recent orders</h3>
+      <button @click="navigate('orders-undispatched')" class="text-sm text-rose-600 hover:text-rose-700 font-medium">View all →</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs text-charcoal-400 uppercase tracking-wide border-b border-charcoal-100">
+            <th class="px-5 py-3 font-medium">Order</th>
+            <th class="px-5 py-3 font-medium">Customer</th>
+            <th class="px-5 py-3 font-medium">Items</th>
+            <th class="px-5 py-3 font-medium">Amount</th>
+            <th class="px-5 py-3 font-medium">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="o in recentOrders" :key="o.id">
+            <tr class="border-b border-charcoal-50 hover:bg-warmwhite/60 transition">
+              <td class="px-5 py-3.5 font-mono text-charcoal-500" x-text="o.id"></td>
+              <td class="px-5 py-3.5 text-charcoal-700 font-medium" x-text="o.customer"></td>
+              <td class="px-5 py-3.5 text-charcoal-500" x-text="o.items + ' items'"></td>
+              <td class="px-5 py-3.5 text-charcoal-700 font-mono" x-text="'₹' + o.amount.toLocaleString('en-IN')"></td>
+              <td class="px-5 py-3.5"><span class="badge" :class="statusBadgeClass(o.status)" x-text="o.status"></span></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

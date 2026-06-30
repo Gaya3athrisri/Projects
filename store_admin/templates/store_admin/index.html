@@ -1,8 +1,42 @@
-{% extends "base.html" %}
-{% block content %}
+<c-layouts.base title="Threadline — Clothing Business Admin">
+<div id="app" x-data="adminApp()" x-init="init()" x-cloak>
 
-<c-card title="Product List">
-    <p>Card content goes here</p>
-</c-card>
+  <!-- ===================== AUTH SCREENS ===================== -->
+  <c-auth.login />
+  <c-auth.forgot />
+  <c-auth.reset />
 
-{% endblock %}
+  <!-- ===================== MAIN APP SHELL ===================== -->
+  <div x-show="authed" class="flex h-screen overflow-hidden">
+
+    <c-shell.sidebar />
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+
+      <c-shell.topnav />
+
+      <!-- PAGE CONTENT -->
+      <main class="flex-1 overflow-y-auto bg-warmwhite">
+        <c-pages.dashboard />
+        <c-pages.products-list />
+        <c-pages.products-form />
+        <c-pages.orders-undispatched />
+        <c-pages.orders-dispatched />
+        <c-pages.reports />
+        <c-ui.report-modal />
+        <c-pages.notifications />
+        <c-pages.settings />
+        <c-pages.components />
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== GLOBAL MODALS ===================== -->
+  <c-ui.delete-modal />
+  <c-ui.demo-modal />
+
+  <!-- ===================== TOASTS ===================== -->
+  <c-ui.toast />
+
+</div>
+</c-layouts.base>

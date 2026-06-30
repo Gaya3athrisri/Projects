@@ -1,0 +1,38 @@
+<!-- ============================================================ -->
+<!-- PAGE: SETTINGS -->
+<!-- Usage: <c-pages.settings /> -->
+<!-- ============================================================ -->
+<div x-show="page === 'settings'" class="p-6 max-w-2xl">
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-5">Profile settings</h3>
+    <div class="flex items-center gap-4 mb-6">
+      <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-display text-xl flex-shrink-0">PK</div>
+      <div>
+        <button class="text-sm font-semibold text-rose-600 hover:text-rose-700">Change photo</button>
+        <p class="text-xs text-charcoal-400 mt-0.5">JPG or PNG, up to 2MB</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-charcoal-600 mb-1.5">Full name</label>
+        <input type="text" value="Priya Kannan" class="w-full rounded-xl border border-charcoal-200 bg-warmwhite px-3.5 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-charcoal-600 mb-1.5">Email</label>
+        <input type="email" value="priya@threadline.com" class="w-full rounded-xl border border-charcoal-200 bg-warmwhite px-3.5 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition" />
+      </div>
+    </div>
+    <div class="flex items-center justify-between mt-6 pt-5 border-t border-charcoal-100">
+      <div>
+        <p class="text-sm font-medium text-charcoal-700">Email notifications</p>
+        <p class="text-xs text-charcoal-400">Get a daily digest of orders and stock alerts</p>
+      </div>
+      <button @click="settingsToggle = !settingsToggle" class="toggle-bg w-11 h-6 rounded-full relative flex-shrink-0" :class="settingsToggle ? 'bg-rose-500' : 'bg-charcoal-200'">
+        <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow" :class="settingsToggle ? 'translate-x-5' : 'translate-x-0'"></span>
+      </button>
+    </div>
+    <div class="flex justify-end mt-6">
+      <button @click="showToast('success','Profile updated','Your changes have been saved.')" class="px-5 py-2.5 rounded-xl bg-rose-500 text-sm font-semibold text-white shadow-soft hover:bg-rose-600 transition">Save changes</button>
+    </div>
+  </div>
+</div>

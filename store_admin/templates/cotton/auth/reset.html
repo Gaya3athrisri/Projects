@@ -1,0 +1,47 @@
+<!-- ============================================================ -->
+<!-- AUTH: RESET PASSWORD -->
+<!-- Usage: <c-auth.reset /> -->
+<!-- ============================================================ -->
+<div x-show="!authed && authView === 'reset'" class="min-h-screen flex items-center justify-center bg-warmwhite p-6">
+  <div class="w-full max-w-sm">
+    <div class="flex items-center gap-2.5 mb-10 justify-center">
+      <div class="w-9 h-9 rounded-lg bg-rose-500 flex items-center justify-center font-display text-warmwhite text-lg">T</div>
+      <span class="font-display text-charcoal-700 text-xl tracking-tight">Threadline</span>
+    </div>
+
+    <template x-if="!resetDone">
+      <div>
+        <h1 class="font-display text-2xl text-charcoal-700">Set a new password</h1>
+        <p class="text-charcoal-400 text-sm mt-2 mb-8">Choose something you haven't used before.</p>
+        <form @submit.prevent="submitReset()" novalidate>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-charcoal-600 mb-1.5">New password</label>
+            <input type="password" x-model="reset.pw1" @blur="validateReset()"
+              :class="reset.errors.pw1 ? 'border-rose-500 ring-1 ring-rose-200' : 'border-charcoal-200 focus:border-rose-400'"
+              class="w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-rose-100" placeholder="••••••••" />
+            <p x-show="reset.errors.pw1" x-text="reset.errors.pw1" class="mt-1.5 text-xs text-rose-600"></p>
+          </div>
+          <div class="mb-2">
+            <label class="block text-sm font-medium text-charcoal-600 mb-1.5">Confirm password</label>
+            <input type="password" x-model="reset.pw2" @blur="validateReset()"
+              :class="reset.errors.pw2 ? 'border-rose-500 ring-1 ring-rose-200' : 'border-charcoal-200 focus:border-rose-400'"
+              class="w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm outline-none transition focus:ring-2 focus:ring-rose-100" placeholder="••••••••" />
+            <p x-show="reset.errors.pw2" x-text="reset.errors.pw2" class="mt-1.5 text-xs text-rose-600"></p>
+          </div>
+          <button type="submit" class="w-full mt-6 rounded-xl bg-rose-500 py-2.5 text-sm font-semibold text-white shadow-soft hover:bg-rose-600 transition">Reset password</button>
+        </form>
+      </div>
+    </template>
+
+    <template x-if="resetDone">
+      <div class="text-center">
+        <div class="w-14 h-14 mx-auto rounded-full bg-softpink flex items-center justify-center mb-5">
+          <svg class="w-6 h-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h1 class="font-display text-2xl text-charcoal-700">Password updated</h1>
+        <p class="text-charcoal-400 text-sm mt-2">You can now sign in with your new password.</p>
+        <button @click="authView='login'; resetDone=false; reset={pw1:'',pw2:'',errors:{}}" class="w-full mt-6 rounded-xl bg-charcoal-700 py-2.5 text-sm font-semibold text-white hover:bg-charcoal-800 transition">Back to sign in</button>
+      </div>
+    </template>
+  </div>
+</div>

@@ -1,0 +1,180 @@
+<!-- ============================================================ -->
+<!-- PAGE: COMPONENT LIBRARY -->
+<!-- Usage: <c-pages.components /> -->
+<!-- Note: pair with <c-ui.demo-modal /> in the parent template -->
+<!-- ============================================================ -->
+<div x-show="page === 'components'" class="p-6 max-w-5xl space-y-6" x-data="{ ddOpen: false, ddSearchOpen: false, ddSearch: '', ddSelected: 'Cotton', tooltipShow: false }">
+
+  <!-- Inputs -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Text inputs</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">Default</label>
+        <input type="text" placeholder="Type here..." class="w-full rounded-xl border border-charcoal-200 bg-warmwhite px-3.5 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">Focused</label>
+        <input type="text" value="Active field" class="w-full rounded-xl border border-rose-400 ring-2 ring-rose-100 bg-warmwhite px-3.5 py-2.5 text-sm outline-none" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">Error</label>
+        <input type="text" value="bad@" class="w-full rounded-xl border border-rose-500 ring-1 ring-rose-200 bg-warmwhite px-3.5 py-2.5 text-sm outline-none" />
+        <p class="mt-1.5 text-xs text-rose-600">Enter a valid email address.</p>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">Disabled</label>
+        <input type="text" value="Locked" disabled class="w-full rounded-xl border border-charcoal-100 bg-charcoal-50 px-3.5 py-2.5 text-sm text-charcoal-300 cursor-not-allowed" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Dropdowns -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Dropdown selects</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">Without search</label>
+        <select class="w-full rounded-xl border border-charcoal-200 bg-warmwhite px-3.5 py-2.5 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition">
+          <option>Cotton</option><option>Linen</option><option>Silk</option><option>Wool</option>
+        </select>
+      </div>
+      <div class="relative" @click.outside="ddSearchOpen = false">
+        <label class="block text-xs font-medium text-charcoal-500 mb-1.5">With live search</label>
+        <button type="button" @click="ddSearchOpen = !ddSearchOpen" class="w-full flex items-center justify-between rounded-xl border border-charcoal-200 bg-warmwhite px-3.5 py-2.5 text-sm text-left focus:border-rose-400 transition">
+          <span x-text="ddSelected"></span>
+          <svg class="w-3.5 h-3.5 text-charcoal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div x-show="ddSearchOpen" x-transition class="absolute z-20 mt-1.5 w-full bg-white rounded-xl shadow-panel border border-charcoal-100 overflow-hidden" style="display:none;">
+          <div class="p-2 border-b border-charcoal-100">
+            <input type="text" x-model="ddSearch" placeholder="Search fabric..." class="w-full rounded-lg border border-charcoal-200 px-2.5 py-1.5 text-sm outline-none focus:border-rose-400" @click.stop>
+          </div>
+          <div class="max-h-40 overflow-y-auto">
+            <template x-for="opt in ['Cotton','Linen','Silk','Wool','Denim','Polyester','Rayon'].filter(o => o.toLowerCase().includes(ddSearch.toLowerCase()))" :key="opt">
+              <button type="button" @click="ddSelected = opt; ddSearchOpen = false; ddSearch=''" class="w-full text-left px-3.5 py-2 text-sm text-charcoal-600 hover:bg-softpink hover:text-rose-700 transition" x-text="opt"></button>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Radio / checkbox / toggle -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Radios, checkboxes &amp; toggles</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div>
+        <p class="text-xs font-medium text-charcoal-500 mb-2">Radio buttons</p>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm text-charcoal-600"><input type="radio" name="demo-radio" class="rose-radio w-4 h-4" checked> In stock only</label>
+          <label class="flex items-center gap-2 text-sm text-charcoal-600"><input type="radio" name="demo-radio" class="rose-radio w-4 h-4"> All products</label>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-medium text-charcoal-500 mb-2">Checkboxes</p>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm text-charcoal-600"><input type="checkbox" class="rose-check w-4 h-4 rounded" checked> Notify on low stock</label>
+          <label class="flex items-center gap-2 text-sm text-charcoal-600"><input type="checkbox" class="rose-check w-4 h-4 rounded"> Auto-archive drafts</label>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-medium text-charcoal-500 mb-2">Toggle switch</p>
+        <div x-data="{ on: true }" class="flex items-center gap-3">
+          <button @click="on = !on" class="toggle-bg w-11 h-6 rounded-full relative" :class="on ? 'bg-rose-500' : 'bg-charcoal-200'">
+            <span class="toggle-dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow" :class="on ? 'translate-x-5' : 'translate-x-0'"></span>
+          </button>
+          <span class="text-sm text-charcoal-500" x-text="on ? 'Live on storefront' : 'Hidden from storefront'"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Buttons</h3>
+    <div class="flex flex-wrap items-center gap-3">
+      <button class="px-4 py-2.5 rounded-xl bg-rose-500 text-sm font-semibold text-white hover:bg-rose-600 transition">Primary</button>
+      <button class="px-4 py-2.5 rounded-xl bg-charcoal-100 text-sm font-semibold text-charcoal-700 hover:bg-charcoal-200 transition">Secondary</button>
+      <button class="px-4 py-2.5 rounded-xl bg-rose-600 text-sm font-semibold text-white hover:bg-rose-700 transition">Danger</button>
+      <button class="px-4 py-2.5 rounded-xl border-2 border-charcoal-700 text-sm font-semibold text-charcoal-700 hover:bg-charcoal-50 transition">Outline</button>
+      <button disabled class="px-4 py-2.5 rounded-xl bg-charcoal-100 text-sm font-semibold text-charcoal-300 cursor-not-allowed">Disabled</button>
+    </div>
+  </div>
+
+  <!-- Tooltip / popup, badges, avatars, breadcrumb -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Tooltips, badges, avatars &amp; breadcrumbs</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="space-y-5">
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Hover tooltip</p>
+          <div class="relative inline-block" @mouseenter="tooltipShow=true" @mouseleave="tooltipShow=false">
+            <button class="w-9 h-9 rounded-full border border-charcoal-200 flex items-center justify-center text-charcoal-400">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 17v-5M12 8h.01"/></svg>
+            </button>
+            <div x-show="tooltipShow" x-transition class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2.5 py-1.5 rounded-lg bg-charcoal-800 text-white text-xs whitespace-nowrap" style="display:none;">Stock syncs every 15 minutes</div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Status badges</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge bg-emerald-50 text-emerald-700">Dispatched</span>
+            <span class="badge bg-amber-50 text-amber-700">Pending</span>
+            <span class="badge bg-rose-50 text-rose-700">Cancelled</span>
+            <span class="badge bg-charcoal-50 text-charcoal-500">Draft</span>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Avatars</p>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-semibold">PK</div>
+            <div class="w-9 h-9 rounded-full bg-charcoal-700 text-white flex items-center justify-center text-sm font-semibold">AR</div>
+            <div class="w-10 h-10 rounded-full bg-softpink text-rose-600 flex items-center justify-center text-sm font-semibold">+5</div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-5">
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Breadcrumb</p>
+          <nav class="flex items-center gap-1.5 text-sm text-charcoal-400">
+            <span class="hover:text-rose-500 cursor-pointer">Products</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+            <span class="hover:text-rose-500 cursor-pointer">Shirts</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+            <span class="text-charcoal-600 font-medium">Linen Wrap Shirt</span>
+          </nav>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Loading spinner</p>
+          <svg class="animate-spin w-6 h-6 text-rose-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-charcoal-500 mb-2">Error alert banner</p>
+          <div class="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-sm text-rose-700">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+            <span>Couldn't save changes — check the highlighted fields.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast triggers -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Toast notifications</h3>
+    <p class="text-sm text-charcoal-400 mb-4">Click to trigger — toasts stack bottom-right and auto-dismiss after 4 seconds.</p>
+    <div class="flex flex-wrap gap-3">
+      <button @click="showToast('success','Product saved','Linen Wrap Shirt is now live.')" class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium hover:bg-emerald-100 transition">Trigger success</button>
+      <button @click="showToast('error','Upload failed','That image exceeds the 5MB limit.')" class="px-4 py-2 rounded-xl bg-rose-50 text-rose-700 text-sm font-medium hover:bg-rose-100 transition">Trigger error</button>
+      <button @click="showToast('warning','Stock running low','Only 4 units of Denim Jacket remain.')" class="px-4 py-2 rounded-xl bg-amber-50 text-amber-700 text-sm font-medium hover:bg-amber-100 transition">Trigger warning</button>
+      <button @click="showToast('info','Sync complete','Inventory was last synced just now.')" class="px-4 py-2 rounded-xl bg-charcoal-50 text-charcoal-600 text-sm font-medium hover:bg-charcoal-100 transition">Trigger info</button>
+    </div>
+  </div>
+
+  <!-- Modal trigger -->
+  <div class="bg-white rounded-xl shadow-card border border-charcoal-100 p-5">
+    <h3 class="font-display text-lg text-charcoal-700 mb-4">Modal / dialog</h3>
+    <button @click="demoModalOpen = true" class="px-4 py-2.5 rounded-xl bg-charcoal-700 text-sm font-semibold text-white hover:bg-charcoal-800 transition">Open modal</button>
+  </div>
+
+</div>
