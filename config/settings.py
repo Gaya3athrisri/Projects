@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'django_cotton',
+    'django_cotton.apps.SimpleAppConfig',
     'django_htmx',
     
     
@@ -62,12 +62,20 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': False,  # Must be False when using custom loaders
         'OPTIONS': {
+            'loaders': [
+                'django_cotton.cotton_loader.Loader',
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ],
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins': [
+                'django_cotton.templatetags.cotton',
             ],
         },
     },
@@ -127,3 +135,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# django-cotton: keep hyphenated component filenames (e.g. delete-modal.html)
+COTTON_SNAKE_CASED_NAMES = False
